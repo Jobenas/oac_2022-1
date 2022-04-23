@@ -108,7 +108,7 @@ suma:
     mov rax, 1
     mov rdi, 1
     mov rsi, resultado
-    mov rdx, 5
+    mov rdx, 1
     syscall
 
     mov rax, 1
@@ -144,7 +144,7 @@ resta:
     mov rax, 1
     mov rdi, 1
     mov rsi, resultado
-    mov rdx, 5
+    mov rdx, 1
     syscall
 
     mov rax, 1
@@ -165,11 +165,14 @@ multiplica:
     
     mov r8, [op1]
     sub r8, 48
+    
     mov r9, [op2]
     sub r9, 48
+
     mov rax, r8
     mul r9
     mov r9, rax
+    
     add r9, 48
     mov [resultado], r9
 
@@ -182,7 +185,7 @@ multiplica:
     mov rax, 1
     mov rdi, 1
     mov rsi, resultado
-    mov rdx, 5
+    mov rdx, 1
     syscall
 
     mov rax, 1
