@@ -1,28 +1,37 @@
 import time
 
+num_conjuntos = 2
 cache_size = 10
 cache = [[0, 0]] * cache_size
-
+idxo = [0] * num_conjuntos
 total = 0
 aciertos = 0
 fallos = 0
 
+
 def exp(n):
-    global total, aciertos, fallos
-    
+    global total, aciertos, fallos, idxo
     total += 1
-    idx = n % cache_size
-    if cache[idx][0] == n:
-        aciertos += 1
-        return cache[idx][1]
+    idxc = n % num_conjuntos
+    p = int(cache_size / num_conjuntos)
+    for i in range(idxc * p, idxc * p + p):
+        if cache[i][0] == n:
+            aciertos += 1
+            return cache[i][0]
     
     fallos += 1
     res = 1
     for i in range(n):
         res *= n
-    
+
+    idx = (idxc * p) + idxo[idxc]
     cache[idx] = [n, res]
-    
+
+    if idxo[idxc] == p - 1:
+        idxo[idxc] = 0
+    else:
+        idxo[idxc] += 1
+
     return res
 
 

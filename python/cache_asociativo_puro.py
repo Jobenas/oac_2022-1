@@ -2,27 +2,30 @@ import time
 
 cache_size = 10
 cache = [[0, 0]] * cache_size
-
+idx = 0
 total = 0
 aciertos = 0
 fallos = 0
 
+
 def exp(n):
-    global total, aciertos, fallos
-    
+    global total, aciertos, fallos, idx
     total += 1
-    idx = n % cache_size
-    if cache[idx][0] == n:
-        aciertos += 1
-        return cache[idx][1]
-    
+    for i in range(cache_size):
+        if cache[i][0] == n:
+            aciertos += 1
+            return cache[i][1]
     fallos += 1
     res = 1
     for i in range(n):
         res *= n
-    
+
     cache[idx] = [n, res]
-    
+    if idx == 9:
+        idx = 0
+    else:
+        idx += 1
+
     return res
 
 
