@@ -15,7 +15,7 @@ def cuenta(n):
         n -= 1
 
 if __name__ == '__main__':
-    imprime_inicio()
+    # imprime_inicio()
     inicio = time.perf_counter()
     cuenta(CUENTA)
     fin = time.perf_counter()
