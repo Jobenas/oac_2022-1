@@ -1,0 +1,1 @@
+https://jobenas-misc-bucket.s3.amazonaws.com/household_power_consumption.csv

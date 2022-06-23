@@ -12,7 +12,6 @@ def cuenta(n):
 
 
 if __name__ == '__main__':
-
     for i in range(num_proc):
         p = Process(target=cuenta, args=(CUENTA / num_proc, ))
         procesos.append(p)
