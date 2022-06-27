@@ -1,5 +1,6 @@
 import time
 from datetime import datetime, timedelta
+import multiprocessing as mp
 
 
 def leer_archivo(archivo: str = "household_power_consumption.csv") -> str:
@@ -50,7 +51,8 @@ def convierte_15_minutos(data: list[str], ts_start: datetime, ts_end: datetime) 
     indice = 0
     while ts < ts_end:
         if ts.hour == 0 and ts.minute == 0 and ts.second == 0:
-            print(f"Calculando dia: {ts.date()}")
+            # print(f"Calculando dia: {ts.date()}")
+            pass
         if indice != -1:
             convertido, indice = encuentra_data(data, ts, ts + timedelta(minutes=15), indice)
         else:
@@ -62,20 +64,35 @@ def convierte_15_minutos(data: list[str], ts_start: datetime, ts_end: datetime) 
 
     return datos
 
+def busca_inicio_anho(data: list[str], anho: int):
+    for idx in range(len(data)):
+        fila = data[idx]
+        fila = separa_columnas(fila)
+        if fila[0].year == anho:
+            return idx
+    return -1
+
 if __name__ == "__main__":
     data = leer_archivo()
     headers, data = separa_filas(data)
-    ts_inicio = datetime(year=2006, month=12, day=16, hour=17, minute=15, second=0)
-    ts_fin = datetime(year=2010, month=11, day=26, hour=21, minute=15, second=0)
+    idxs = [0, 21996, 547596, 1074636, 1600236]
+    num_bloque = 8
+    
+    sub_data = []
+    for i in range(len(idxs)):
+        if i < len(idxs) - 1:
+            sub_data.append(data[idxs[i]:idxs[i+1]])
+        else:
+            sub_data.append(data[idxs[i]:])
 
-    # ts_inicio = datetime(year=2006, month=12, day=17, hour=0, minute=0, second=0)
-    # ts_fin = datetime(year=2006, month=12, day=18, hour=0, minute=0, second=0)
+    fechas_inicio = [datetime.strptime(b[0].split(",")[0], "%Y-%m-%d %H:%M:%S") for b in sub_data]
+    fechas_fin = [datetime.strptime(b[-1].split(",")[0], "%Y-%m-%d %H:%M:%S") for b in sub_data]
+
+    args = zip(sub_data, fechas_inicio, fechas_fin)
+    p = mp.Pool(processes=mp.cpu_count())
 
     inicio = time.perf_counter()
-    datos = convierte_15_minutos(data, ts_inicio, ts_fin)
+    resultados = p.starmap(convierte_15_minutos, args)
     fin = time.perf_counter()
-
-    print(len(datos))
-    print(datos[0])
-    print(datos[-1])
+    print(resultados[0][0])
     print(f"Tiempo de ejecución: {fin - inicio} segundos")

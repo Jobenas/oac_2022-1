@@ -1,6 +1,5 @@
 import time
 import numpy as np
-import random
 from itertools import repeat
 from multiprocessing import Pool, cpu_count
 
