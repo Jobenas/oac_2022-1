@@ -19,7 +19,7 @@ def get_site(url):
 
 
 def get_all(sites):
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=8) as executor:
         executor.map(get_site, sites)
 
 
